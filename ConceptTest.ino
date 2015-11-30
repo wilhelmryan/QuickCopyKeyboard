@@ -30,9 +30,18 @@ char user[]="189";
 char prefix[]="PRO-";
 
 unsigned long prevprint=0;
-unsigned long debounce=500;
+unsigned long debounce=200;
+
+unsigned long timer=0;
+unsigned long period=5000;
+const int heartbeat=9;
+int value;
+
+int totals[9];
+
 
 void setup() {
+  pinMode(heartbeat,OUTPUT);
   
   delay(1000);
   cap.begin(0x5A);
@@ -48,6 +57,15 @@ for(int i=0;i<12;i++)
 {
   if(cap.touched() & (1 << i)){processPrint(i);}
 }
+
+timer=millis();
+if(timer-prevprint<1000){analogWrite(heartbeat,255);}
+
+else {
+value =abs(50*cos(2*PI/period*timer));
+analogWrite(heartbeat, value);
+}
+
 }
 
 void processPrint(int printNumber)
@@ -57,7 +75,7 @@ void processPrint(int printNumber)
   if(current-prevprint>=debounce)
   {
     switch(printNumber){
-      case 3:
+      case 8:
       {
         char use[]="FF-";
         for(int i=0;i<sizeof(prefix);i++)
@@ -70,7 +88,7 @@ void processPrint(int printNumber)
         }
           break;
       }
-      case 7:
+      case 4:
        {
         char use[]="KK-";
         for(int i=0;i<sizeof(prefix);i++)
@@ -83,7 +101,7 @@ void processPrint(int printNumber)
         }
           break;
        }
-       case 11:
+       case 0:
         {
           char use[]="PRO-";
           for(int i=0;i<sizeof(prefix);i++)
@@ -96,7 +114,7 @@ void processPrint(int printNumber)
           }
             break;
         }
-        case 2:
+        case 9:
         {
           char userno[]="189";
           for(int i=0;i<sizeof(user);i++)
@@ -105,9 +123,10 @@ void processPrint(int printNumber)
           }
           Keyboard.print(prefix);
           Keyboard.println(user);
+          totals[0]+=1;
             break;
         }
-        case 6:
+        case 5:
         {
           char userno[]="021";
           for(int i=0;i<sizeof(user);i++)
@@ -116,22 +135,117 @@ void processPrint(int printNumber)
           }
           Keyboard.print(prefix);
           Keyboard.println(user);
+          totals[1]+=1;
             break;
         }
-        case 10:
+        case 1:
         {
-          char userno[]="051";
+          char userno[]="053";
           for(int i=0;i<sizeof(user);i++)
           {
             user[i]=userno[i];
           }
           Keyboard.print(prefix);
           Keyboard.println(user);
+          totals[2]+=1;
+            break;
+        }
+
+        case 10:
+        {
+          char userno[]="RYA";
+          for(int i=0;i<sizeof(user);i++)
+          {
+            user[i]=userno[i];
+          }
+          Keyboard.print(prefix);
+          Keyboard.println(user);
+          totals[3]+=1;
+            break;
+        }
+        case 6:
+        {
+          char userno[]="JJJ";
+          for(int i=0;i<sizeof(user);i++)
+          {
+            user[i]=userno[i];
+          }
+          Keyboard.print(prefix);
+          Keyboard.println(user);
+          totals[4]+=1;
+            break;
+        }
+        case 3:
+        {
+          printTotals();
             break;
         }
     }
     prevprint=current;
   }
   else {prevprint=current;}
+}
+
+void printTotals()
+{
+  char userno[]="123";
+  
+  for(int i=0;i<9;i++){
+    if(totals[i])
+    {
+      switch(i)
+      {
+        case 0:
+        {
+          char usertotal[]="189";
+          for(int i=0;i<sizeof(userno);i++)
+          {
+            userno[i]=usertotal[i];
+          }
+          break;
+        }
+        case 1:
+        {
+          char usertotal[]="021";
+          for(int i=0;i<sizeof(userno);i++)
+          {
+            userno[i]=usertotal[i];
+          }
+          break;
+        }
+        case 2:
+        {
+          char usertotal[]="053";
+          for(int i=0;i<sizeof(userno);i++)
+          {
+            userno[i]=usertotal[i];
+          }
+          break;
+        }
+        case 3:
+        {
+          char usertotal[]="RYA";
+          for(int i=0;i<sizeof(userno);i++)
+          {
+            userno[i]=usertotal[i];
+          }
+          break;
+        }
+        case 4:
+        {
+          char usertotal[]="JJJ";
+          for(int i=0;i<sizeof(userno);i++)
+          {
+            userno[i]=usertotal[i];
+          }
+          break;
+        }
+      }
+      Keyboard.print(userno);
+      Keyboard.print(" packed ");
+      Keyboard.print(totals[i]);
+      Keyboard.println(" packages");
+    }
+  }
 }
 
