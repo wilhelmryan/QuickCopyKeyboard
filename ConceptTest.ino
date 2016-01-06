@@ -153,7 +153,7 @@ void processPrint(int printNumber)
 
         case 10:
         {
-          char userno[]="RYA";
+          char userno[]="530";
           for(int i=0;i<sizeof(user);i++)
           {
             user[i]=userno[i];
@@ -165,7 +165,7 @@ void processPrint(int printNumber)
         }
         case 6:
         {
-          char userno[]="JJJ";
+          char userno[]="500";
           for(int i=0;i<sizeof(user);i++)
           {
             user[i]=userno[i];
@@ -224,7 +224,7 @@ void printTotals()
         }
         case 3:
         {
-          char usertotal[]="RYA";
+          char usertotal[]="530";
           for(int i=0;i<sizeof(userno);i++)
           {
             userno[i]=usertotal[i];
@@ -233,7 +233,7 @@ void printTotals()
         }
         case 4:
         {
-          char usertotal[]="JJJ";
+          char usertotal[]="500";
           for(int i=0;i<sizeof(userno);i++)
           {
             userno[i]=usertotal[i];
